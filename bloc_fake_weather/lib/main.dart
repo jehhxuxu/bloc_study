@@ -53,6 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (state is WeatherLoading) {
                     return CircularProgressIndicator();
                   }
+                  if (state is WeatherError) {
+                    return Text(state.error);
+                  }
                   if (state is WeatherLoaded) {
                     return weatherCompleteFields(state.weather);
                   }
@@ -72,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
           weather.cityName.toUpperCase(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 30,
+            fontSize: 40,
           ),
         ),
         SizedBox(
@@ -81,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Text(
           '${weather.temperature.toStringAsFixed(1)} °C',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 30,
           ),
         ),
         SizedBox(

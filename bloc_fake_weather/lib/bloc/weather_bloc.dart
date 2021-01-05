@@ -17,13 +17,17 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     WeatherEvent event,
   ) async* {
     if (event is GetWeatherEvent) {
-      yield WeatherLoading();
-      final weather = await _fetchWeatherFromFakeApi(event.cityName);
-      yield WeatherLoaded(weather);
+      if (event.cityName.isEmpty) {
+        yield WeatherError('Campo cidade nao pode ser vazio');
+      } else {
+        yield WeatherLoading();
+        final weather = await fetchWeatherFromFakeApi(event.cityName);
+        yield WeatherLoaded(weather);
+      }
     }
   }
 
-  Future<Weather> _fetchWeatherFromFakeApi(String cityName) {
+  Future<Weather> fetchWeatherFromFakeApi(String cityName) {
     return Future.delayed(Duration(seconds: 2), () {
       return Weather(
         cityName: cityName,
