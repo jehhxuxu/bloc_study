@@ -1,4 +1,5 @@
 import 'package:bloc_fake_weather/bloc/weather_bloc.dart';
+import 'package:bloc_fake_weather/bloc/weather_errors.dart';
 import 'package:bloc_fake_weather/model/weather.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,7 +14,7 @@ void main() {
     'city cannot be empty with bloc',
     build: () => weatherBloc,
     act: (bloc) => weatherBloc.add(GetWeatherEvent('')),
-    expect: [isA<WeatherError>()],
+    expect: [isA<WeatherLoading>(), isA<WeatherError>()],
   );
 
   blocTest(
@@ -24,7 +25,7 @@ void main() {
   );
   test('city cannot be empty', () {
     weatherBloc.add(GetWeatherEvent(''));
-    expectLater(weatherBloc, emitsInOrder([isA<WeatherError>()]));
+    expectLater(weatherBloc, emitsInOrder([isA<WeatherLoading>(), isA<WeatherError>()]));
   });
   test('happy path', () {
     weatherBloc.add(GetWeatherEvent('London'));
@@ -34,5 +35,9 @@ void main() {
   test('happy path fetchWeatherFromFakeApi', () async {
     var weatherResponse = await weatherBloc.fetchWeatherFromFakeApi('London');
     expectLater(weatherResponse, isA<Weather>());
+  });
+
+  test('city cannot be empty fetchWeatherFromFakeApi', () async {
+    expect(() => weatherBloc.fetchWeatherFromFakeApi(''), throwsA(isA<EmptyCity>()));
   });
 }
