@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:bloc/bloc.dart';
 import 'package:bloc_fake_weather/bloc/weather_errors.dart';
 import 'package:bloc_fake_weather/model/weather.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';
 
-class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
+class WeatherBloc extends HydratedBloc<WeatherEvent, WeatherState> {
   WeatherBloc() : super(WeatherInitial());
 
   @override
@@ -37,5 +37,24 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         temperature: 20 + Random().nextInt(15) + Random().nextDouble(),
       );
     });
+  }
+
+  @override
+  WeatherState fromJson(Map<String, dynamic> json) {
+    try {
+      final weather = Weather.fromMap(json);
+      return WeatherLoaded(weather);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(WeatherState state) {
+    if (state is WeatherLoaded) {
+      return state.weather.toMap();
+    } else {
+      return null;
+    }
   }
 }
