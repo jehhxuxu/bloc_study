@@ -7,16 +7,34 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String _email = '';
+  String _password = '';
+
   @override
   Widget build(BuildContext context) {
-    String _email = '';
-    String _password = '';
-    var mediaQuerySize = MediaQuery.of(context).size;
     return Scaffold(
-        body: SingleChildScrollView(
+        body: Stack(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          child: Image.asset(
+            'assets/images/spiderman.jpg',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Container(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        _body(),
+      ],
+    ));
+  }
+
+  Widget _body() {
+    return SingleChildScrollView(
       child: SizedBox(
-        width: mediaQuerySize.width,
-        height: mediaQuerySize.height,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -33,11 +51,23 @@ class _LoginPageState extends State<LoginPage> {
                 height: 10,
               ),
               TextFormField(
+                style: TextStyle(color: Colors.white),
                 onChanged: (email) {
                   _email = email;
                 },
                 decoration: InputDecoration(
                   labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.white),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -45,13 +75,25 @@ class _LoginPageState extends State<LoginPage> {
                 height: 10,
               ),
               TextFormField(
+                style: TextStyle(color: Colors.white),
                 onChanged: (password) {
                   _password = password;
                 },
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Senha',
+                  labelStyle: TextStyle(color: Colors.white),
                   border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(
@@ -69,6 +111,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-    ));
+    );
   }
 }
